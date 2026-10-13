@@ -1,0 +1,20 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qr-code-generator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qr-code-generator
+  template:
+    metadata:
+      labels:
+        app: qr-code-generator
+    spec:
+      containers:
+        - name: qr-code-generator
+          image: nandini9334/qr-code-generator:latest
+          ports:
+            - containerPort: 5050
