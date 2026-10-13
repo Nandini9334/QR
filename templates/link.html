@@ -1,0 +1,133 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link to QR Code</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            margin: 0;
+            color: #1e293b;
+        }
+
+        header {
+            background: #0d47a1;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 35px auto;
+            padding: 25px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px #00000015;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        button, .button {
+            display: inline-block;
+            background: #0d47a1;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            margin-top: 15px;
+            font-size: 15px;
+        }
+
+        button:hover, .button:hover {
+            background: #1565c0;
+        }
+
+        .result {
+            text-align: center;
+            margin-top: 25px;
+            overflow-wrap: anywhere;
+        }
+
+        .result img {
+            max-width: 250px;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .error {
+            color: #b91c1c;
+            margin-top: 12px;
+        }
+
+        .home {
+            display: inline-block;
+            margin-top: 20px;
+            color: #0d47a1;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Link to QR Code</h1>
+        <p>Convert a website URL into a QR code</p>
+    </header>
+
+    <div class="container">
+        <form method="POST">
+            <label for="link">Enter website URL</label>
+
+            <input type="url" id="link" name="link"
+                   placeholder="https://example.com"
+                   value="{{ link }}" required>
+
+            <button type="submit">Generate QR Code</button>
+        </form>
+
+        {% if qr_image %}
+        <div class="result">
+            <h2>Your QR Code</h2>
+            <p>{{ link }}</p>
+
+            <img src="data:image/png;base64,{{ qr_image }}"
+                 alt="Generated QR Code">
+
+            <br>
+
+            <a class="button"
+               href="{{ url_for('download_qr', content=link, type='Link') }}">
+                Download QR Code
+            </a>
+        </div>
+        {% elif request.method == 'POST' %}
+        <p class="error">
+            Please enter a valid website URL beginning with http:// or https://.
+        </p>
+        {% endif %}
+
+        <a class="home" href="{{ url_for('home') }}">
+            ← Back to Home
+        </a>
+    </div>
+</body>
+</html>
