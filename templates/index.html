@@ -4,102 +4,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>QR Code Generator</title>
+    <title>QR Code Generator - Home</title>
 
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #eef2f7;
+            background: #f1f5f9;
+            margin: 0;
+            color: #1e293b;
+        }
+
+        header {
+            background: #0d47a1;
+            color: white;
+            padding: 22px;
             text-align: center;
-            padding: 40px 15px;
         }
 
         .container {
+            width: 85%;
+            max-width: 1000px;
+            margin: 30px auto;
+        }
+
+        .options {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 35px;
+        }
+
+        .card {
             background: white;
-            max-width: 450px;
-            margin: auto;
-            padding: 30px;
+            padding: 25px;
             border-radius: 12px;
-            box-shadow: 0 4px 15px #cccccc;
+            flex: 1;
+            min-width: 220px;
+            box-shadow: 0 3px 10px #00000015;
         }
 
-        h1 {
-            color: #1565c0;
+        .card h2 {
+            color: #0d47a1;
         }
 
-        input {
-            width: 90%;
-            padding: 12px;
-            margin-top: 15px;
-            border: 1px solid #aaa;
-            border-radius: 5px;
-        }
-
-        button {
-            background: #1565c0;
-            color: white;
-            padding: 12px 20px;
-            margin-top: 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background: #0d47a1;
-        }
-
-        img {
-            width: 200px;
-            max-width: 100%;
-            margin-top: 20px;
-        }
-
-        a {
+        .button {
             display: inline-block;
+            background: #0d47a1;
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+
+        .button:hover {
+            background: #1565c0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
             margin-top: 15px;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+            overflow-wrap: anywhere;
+        }
+
+        th {
+            background: #0d47a1;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        .empty {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: 92%;
+            }
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
+    <header>
         <h1>QR Code Generator</h1>
+        <p>Generate QR codes easily from text and website links</p>
+    </header>
 
-        <p>Enter text or a URL to generate your QR code.</p>
+    <div class="container">
 
-        <form method="POST">
-            <input
-                type="text"
-                name="text"
-                placeholder="Enter text or URL"
-                value="{{ text }}"
-                required
-            >
+        <h2>Choose QR Code Type</h2>
 
-            <br>
+        <div class="options">
+            <div class="card">
+                <h2>Text to QR Code</h2>
+                <p>Convert messages, notes, or any text into a QR code.</p>
+                <a href="{{ url_for('text_qr') }}" class="button">
+                    Generate Text QR
+                </a>
+            </div>
 
-            <button type="submit">Generate QR Code</button>
-        </form>
+            <div class="card">
+                <h2>Link to QR Code</h2>
+                <p>Convert a website URL into a scannable QR code.</p>
+                <a href="{{ url_for('link_qr') }}" class="button">
+                    Generate Link QR
+                </a>
+            </div>
+        </div>
 
-        {% if qr_image %}
-            <h3>Your QR Code</h3>
+        <h2>QR Code History</h2>
+        <p>Recently generated QR codes appear here.</p>
 
-            <img
-                src="data:image/png;base64,{{ qr_image }}"
-                alt="Generated QR Code"
-            >
+        {% if history %}
+        <table>
+            <thead>
+                <tr>
+                    <th>S.No.</th>
+                    <th>Type</th>
+                    <th>Text / URL</th>
+                    <th>Generated Date</th>
+                </tr>
+            </thead>
 
-            <br>
-
-            <a
-                href="data:image/png;base64,{{ qr_image }}"
-                download="qrcode.png"
-            >
-                Download QR Code
-            </a>
+            <tbody>
+                {% for item in history %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ item['qr_type'] }}</td>
+                    <td>{{ item['content'] }}</td>
+                    <td>{{ item['created_at'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="empty">
+            No QR codes generated yet. Generate your first QR code!
+        </div>
         {% endif %}
+
     </div>
 </body>
 </html>
