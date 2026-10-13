@@ -21,7 +21,7 @@ pipeline {
 
         stage('Push image to Docker Hub') {
             steps {
-                bat 'docker login -u nandini9334 -p YOUR_DOCKERHUB_PASSWORD'
+                bat 'docker login -u nandini9334 -p dhinnu@18'
 
                 bat 'docker push nandini9334/qr-code-generator:%BUILD_NUMBER%'
 
