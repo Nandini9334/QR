@@ -28,6 +28,15 @@ pipeline {
                 bat 'docker push nandini9334/qr-code-generator:latest'
             }
         }
+        
+stage('Deploy to Kubernetes') {
+    steps {
+        bat 'kubectl apply -f deployment.yaml'
+        bat 'kubectl apply -f service.yaml'
+        bat 'kubectl rollout status deployment/qr-code-generator'
+    }
+}
+
 
 
     
